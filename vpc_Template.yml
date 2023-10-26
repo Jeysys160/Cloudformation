@@ -89,7 +89,7 @@ Parameters:
   KeyName:
     Description: Llave para usar en la EC2
     ConstraintDescription: Debe ser un nombre que no exista en sus llaves
-    Type: AWS::EC2::KeyPair::KeyName
+    Type: String
 
 
 Resources:
@@ -253,17 +253,21 @@ Resources:
       ImageId: ami-0e83be366243f524a
       InstanceType: !Ref Ec2Type
       KeyName: !Ref NewKeyPair
-    NetworkInterfaces: 
-      - AssociatePublicIpAddress: "true"
-        DeviceIndex: "0"
-        GroupSet: 
-          - !Ref SSHSecurityGroup
-        SubnetId: !Ref PublicSubnet1
-    BlockDeviceMappings:
-      Ebs:
-        VolumeType: !Ref TypeVolumen
-        DeleteOnTermination: true
-        VolumenSize: !Ref SizeVolumen
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+            - !Ref SSHSecurityGroup
+          SubnetId: !Ref PublicSubnet1
+      BlockDeviceMappings:
+      - DeviceName: /dev/sdm
+        Ebs:
+          VolumeType: !Ref TypeVolumen
+          DeleteOnTermination: true
+          VolumeSize: !Ref SizeVolumen
+      Tags:
+        - Key: Name
+          Value: EC2 PRUEBA
 
 Outputs:
   VPC: 
@@ -313,9 +317,3 @@ Outputs:
     Export:
       Name: !Sub ${AWS::StackName}-WebServerSecurityGroup
     Value: !Ref WebServerSecurityGroup
-
-    PublicIP:
-    Description: EC2 public IP
-     Export:
-      Name: !Sub ${AWS::StackName}-PublicIP
-    Value: !GetAtt EC2.PublicIp
