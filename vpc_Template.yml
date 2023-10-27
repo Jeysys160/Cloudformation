@@ -21,7 +21,7 @@ Parameters:
     ConstraintDescription: Debe ser un nombre que no exista en sus llaves
     Type: String
 
-  TypeVolumen:
+  TypeVolumen1:
     Default: gp3
     Description: Ingrese el tipo de EBS
     AllowedValues:
@@ -31,10 +31,26 @@ Parameters:
       - io2
     Type: String
 
-  SizeVolumen:
+  SizeVolumen1:
     Default: 20
     Description: Por favor ingrese el tamaño del volumen EBS
     Type: String
+
+  TypeVolumen2:
+    Default: gp3
+    Description: Ingrese el tipo de EBS
+    AllowedValues:
+      - gp2
+      - gp3
+      - io1
+      - io2
+    Type: String
+
+  SizeVolumen2:
+    Default: 20
+    Description: Por favor ingrese el tamaño del volumen EBS
+    Type: String
+
 
 Resources:
 
@@ -55,9 +71,14 @@ Resources:
       BlockDeviceMappings:
       - DeviceName: /dev/sdm
         Ebs:
-          VolumeType: !Ref TypeVolumen
+          VolumeType: !Ref TypeVolumen1
           DeleteOnTermination: true
-          VolumeSize: !Ref SizeVolumen
+          VolumeSize: !Ref SizeVolumen1
+      - DeviceName: /dev/sdp
+        Ebs:
+          VolumeType: !Ref TypeVolumen2
+          DeleteOnTermination: true
+          VolumeSize: !Ref SizeVolumen2
       Tags:
         - Key: Name
           Value: EC2 PRUEBA
